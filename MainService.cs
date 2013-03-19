@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
-using System.Text;
+using log4net;
+using log4net.Config;
 using Nancy.Hosting.Self;
 
+[assembly: XmlConfigurator(Watch = true)]
 namespace NancyRestService
 {
     public partial class MainService : ServiceBase
     {
-        private NancyHost host = null;
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private NancyHost _host = null;
 
         public MainService()
         {
@@ -21,15 +20,17 @@ namespace NancyRestService
 
         protected override void OnStart(string[] args)
         {
-            host = new NancyHost(new Uri("http://skipperportal.luckyluke.local:9090"));
-            host.Start();
+            Log.Debug("Start host");
+            _host = new NancyHost(new Uri("http://skipperportal.luckyluke.local:9090"));
+            _host.Start();
         }
 
         protected override void OnStop()
         {
-            if (host != null)
+            Log.Debug("Stop host");
+            if (_host != null)
             {
-                host.Stop();
+                _host.Stop();
             }
         }
     }
