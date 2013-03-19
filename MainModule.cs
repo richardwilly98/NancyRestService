@@ -9,7 +9,8 @@ namespace NancyRestService
     {
         public MainModule()
         {
-            Get["/"] = _ => { return "Hello REST Service"; };
+            Get["/"] = _ => "Hello REST Service";
+            Get["/hello/{name}"] = _ => String.Format("Hello REST Service {0}", _.name);
         }
     }
 }
